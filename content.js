@@ -281,6 +281,7 @@ window.onload = function () {
         background-repeat: no-repeat;
         background-position: center bottom;
         transition: 0.3s ease-in-out transform;
+        z-index: 100;
       `;
 
       // this.newDiv.innerHTML = "hi"; // want it to say something?
