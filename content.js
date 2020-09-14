@@ -262,7 +262,6 @@ window.onload = function () {
       plugin.clientY += plugin.clientSpeedY;
 
       // alter display
-      console.log("plugin.clientX:", plugin.clientX);
       var newLeftVal = plugin.clientX - 25;
       plugin.newDiv.style.left = newLeftVal + "px"; // width is 50, so centres it
       var newTopVal = plugin.clientY - 50;
