@@ -262,8 +262,11 @@ window.onload = function () {
       plugin.clientY += plugin.clientSpeedY;
 
       // alter display
-      plugin.newDiv.style.left = plugin.clientX - 25; // width is 50, so centres it
-      plugin.newDiv.style.top = plugin.clientY - 50; // height is 50, so bottom is the point
+      console.log("plugin.clientX:", plugin.clientX);
+      var newLeftVal = plugin.clientX - 25;
+      plugin.newDiv.style.left = newLeftVal + "px"; // width is 50, so centres it
+      var newTopVal = plugin.clientY - 50;
+      plugin.newDiv.style.top = newTopVal + "px"; // height is 50, so bottom is the point
     },
     init() {
       this.newDiv = document.createElement("div");
