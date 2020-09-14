@@ -271,3 +271,12 @@ window.onload = function () {
 
   mouseX.init();
 };
+
+// to incorporate later:
+// blur() {
+//   document.querySelectorAll("input,textarea").forEach(function (element) {
+//     if (element === document.activeElement) {
+//       return element.blur();
+//     }
+//   });
+// },
