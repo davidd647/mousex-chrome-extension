@@ -11,4 +11,4 @@ A Google Chrome extension replaces the mouse.
 - Click 'LOAD UNPACKED'
 - Select the directory where you cloned the repo to
 - The extension should appear in your extensions list! Toggle it on
-- Go to a page with a form, and click Marvin!
+- Go somewhere on the internet, and use MouseX just as you used it on this page!
