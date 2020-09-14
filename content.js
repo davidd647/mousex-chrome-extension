@@ -254,7 +254,7 @@ window.onload = function () {
         background: url(${chrome.extension.getURL("ufo.gif")});
         background-size: contain;
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: center bottom;
         transition: 0.3s ease-in-out transform;
       `;
 
