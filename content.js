@@ -1,5 +1,6 @@
 window.onload = function () {
   var mouseX = {
+    stabilizeActive: false,
     dirUpActive: false,
     dirDownActive: false,
     dirLeftActive: false,
@@ -14,12 +15,42 @@ window.onload = function () {
 
     newDiv: document.createElement("div"),
 
+    mouseXActive: false,
+
     getScreenSize() {
       this.screenWidth = this.body.height;
       this.screenHeight = this.body.height;
     },
-    getWindowSize() {},
+    getWindowSize() {
+      this.windowWidth = window.innerWidth;
+      this.windowHeight = window.innerHeight;
+    },
     handleKeyDown(e) {
+      // cmd = 91, ctrl = 17
+      if (e.keyCode === 91 || e.keyCode === 17) {
+        this.commandKey = true;
+      }
+
+      if (e.keyCode === 88 && this.commandKey) {
+        if (!this.mouseXActive) {
+          console.log("activating MouseX");
+          this.mouseXActive = true;
+          this.clientSpeedX = 0;
+          this.clientSpeedY = 0;
+          var plugin = this;
+
+          this.mainLoopToggler = setInterval(() => {
+            this.mainLoop(plugin);
+          }, 10);
+        } else {
+          console.log("deactivating MouseX");
+          this.mouseXActive = false;
+
+          clearInterval(this.mainLoopToggler);
+          this.mainLoopToggler = null;
+        }
+      }
+
       if (e.keyCode === 87 || e.keyCode === 38) {
         this.dirUpActive = true;
       }
@@ -32,6 +63,29 @@ window.onload = function () {
       if (e.keyCode === 68 || e.keyCode === 39) {
         this.dirRightActive = true;
       }
+      if (e.keyCode === 81) {
+        this.stabilizeActive = true;
+      }
+
+      // e = 69 //simulate click
+      // if (e.keyCode === 69) {
+      //   var element = document.elementFromPoint(
+      //     this.clientX,
+      //     this.clientY - this.scrollTop
+      //   );
+      //   console.log("click!");
+      //   console.log(this.clientX, this.clientY);
+      //   console.log($(element));
+      //   if ($(element).is("textarea, input")) {
+      //     $(element).focus();
+      //   } else {
+      //     // disable scrolling based on rocket position
+      //     this.clientY = null;
+      //     $(element)[0].click();
+      //     // reinstate rocket position
+      //     this.clientY = this.scrollTop;
+      //   }
+      // }
     },
     handleKeyUp(e) {
       if (e.keyCode === 87 || e.keyCode === 38) {
@@ -46,6 +100,9 @@ window.onload = function () {
       if (e.keyCode === 68 || e.keyCode === 39) {
         this.dirRightActive = false;
       }
+      if (e.keyCode === 81) {
+        this.stabilizeActive = false;
+      }
     },
     addEventListeners() {
       var plugin = this;
@@ -57,6 +114,30 @@ window.onload = function () {
       document.addEventListener("keyup", function (e) {
         plugin.handleKeyUp(e);
       });
+    },
+    stabilize() {
+      // stabilize x-axis
+      if (this.clientSpeedX > 0) {
+        this.clientSpeedX -= this.speedIncrements;
+      } else if (this.clientSpeedX < 0) {
+        this.clientSpeedX += this.speedIncrements;
+      }
+
+      // stabilize y-axis
+      if (this.clientSpeedY > 0) {
+        this.clientSpeedY -= this.speedIncrements;
+      } else if (this.clientSpeedY < 0) {
+        this.clientSpeedY += this.speedIncrements;
+      }
+
+      // stabilize to exactly zero if very close
+      if (
+        Math.abs(this.clientSpeedX) <= 1 &&
+        Math.abs(this.clientSpeedY) <= 1
+      ) {
+        this.clientSpeedX = 0;
+        this.clientSpeedY = 0;
+      }
     },
     accelerateUp() {
       this.clientSpeedY -= this.speedIncrements;
@@ -71,6 +152,9 @@ window.onload = function () {
       this.clientSpeedX += this.speedIncrements;
     },
     mainLoop(plugin) {
+      if (plugin.stabilizeActive) {
+        this.stabilize();
+      }
       if (plugin.dirUpActive) {
         plugin.accelerateUp();
       }
@@ -101,12 +185,6 @@ window.onload = function () {
       body.appendChild(this.newDiv);
 
       this.addEventListeners();
-
-      var plugin = this;
-
-      this.mainLoopToggler = setInterval(() => {
-        this.mainLoop(plugin);
-      }, 10);
     },
   };
 
